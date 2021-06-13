@@ -2,7 +2,7 @@
   <div class="grid">
     <div class="cells">
       <div class="row">
-        <div class="cell" data-row="0" data-col="0" />
+        <div class="cell" data-row="0" data-col="0" @click="toggleHighlight" />
         <div class="cell" data-row="0" data-col="1" />
         <div class="cell" data-row="0" data-col="2" />
         <div class="cell" data-row="0" data-col="3" />
@@ -110,9 +110,9 @@
       draggable="false"
       viewBox="0 0 576 576"
     >
-      <g id="background" />
+      <!-- <g id="background" />
       <g id="underlay" />
-      <g id="cell-colours" />
+      <g id="cell-colours" /> -->
       <g id="cell-highlights">
         <rect
           className="cell-highlight"
@@ -216,8 +216,8 @@
           d="M384 384 L480 384 L576 384 L576 480 L576 576 L480 576 L384 576 L384 480 Z"
         />
       </g>
-      <g id="cell-errors" />
-      <g id="overlay" />
+      <!-- <g id="cell-errors" />
+      <g id="overlay" /> -->
       <g id="cell-givens">
         <text
           x="288.96"
@@ -252,7 +252,7 @@
           4
         </text>
       </g>
-      <g id="cell-pen" />
+      <!-- <g id="cell-pen" /> -->
       <g id="cell-pencilmarks">
         <text
           x="480.96"
@@ -319,16 +319,22 @@
 </template>
 
 <script>
+// import Snap from 'snapsvg'
 export default {
   computed: {
     sudokuMatrix () {
       return this.$store.state.grid
     }
+  },
+  methods: {
+    toggleHighlight (event) {
+      console.log(event.target)
+    }
   }
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .grid {
   position: absolute;
   display: flex;
