@@ -1,30 +1,35 @@
 export const state = () => ({
+  // TODO Express "given" numbers in this map?
   grid: [
-    [{ digit: null, cornerPencilMarks: [], centrePencilMarks: [] }, { digit: null, cornerPencilMarks: [], centrePencilMarks: [] }, { digit: null, cornerPencilMarks: [], centrePencilMarks: [] }, { digit: null, cornerPencilMarks: [], centrePencilMarks: [] }, { digit: null, cornerPencilMarks: [], centrePencilMarks: [] }, { digit: null, cornerPencilMarks: [], centrePencilMarks: [] }, { digit: null, cornerPencilMarks: [], centrePencilMarks: [] }, { digit: null, cornerPencilMarks: [], centrePencilMarks: [] }, { digit: null, cornerPencilMarks: [], centrePencilMarks: [] }],
-    [{ digit: null, cornerPencilMarks: [], centrePencilMarks: [] }, { digit: null, cornerPencilMarks: [], centrePencilMarks: [] }, { digit: null, cornerPencilMarks: [], centrePencilMarks: [] }, { digit: null, cornerPencilMarks: [], centrePencilMarks: [] }, { digit: null, cornerPencilMarks: [], centrePencilMarks: [] }, { digit: null, cornerPencilMarks: [], centrePencilMarks: [] }, { digit: null, cornerPencilMarks: [], centrePencilMarks: [] }, { digit: null, cornerPencilMarks: [], centrePencilMarks: [] }, { digit: null, cornerPencilMarks: [], centrePencilMarks: [] }],
-    [{ digit: null, cornerPencilMarks: [], centrePencilMarks: [] }, { digit: null, cornerPencilMarks: [], centrePencilMarks: [] }, { digit: null, cornerPencilMarks: [], centrePencilMarks: [] }, { digit: null, cornerPencilMarks: [], centrePencilMarks: [] }, { digit: null, cornerPencilMarks: [], centrePencilMarks: [] }, { digit: null, cornerPencilMarks: [], centrePencilMarks: [] }, { digit: null, cornerPencilMarks: [], centrePencilMarks: [] }, { digit: null, cornerPencilMarks: [], centrePencilMarks: [] }, { digit: null, cornerPencilMarks: [], centrePencilMarks: [] }],
-    [{ digit: null, cornerPencilMarks: [], centrePencilMarks: [] }, { digit: null, cornerPencilMarks: [], centrePencilMarks: [] }, { digit: null, cornerPencilMarks: [], centrePencilMarks: [] }, { digit: null, cornerPencilMarks: [], centrePencilMarks: [] }, { digit: null, cornerPencilMarks: [], centrePencilMarks: [] }, { digit: null, cornerPencilMarks: [], centrePencilMarks: [] }, { digit: null, cornerPencilMarks: [], centrePencilMarks: [] }, { digit: null, cornerPencilMarks: [], centrePencilMarks: [] }, { digit: null, cornerPencilMarks: [], centrePencilMarks: [] }],
-    [{ digit: null, cornerPencilMarks: [], centrePencilMarks: [] }, { digit: null, cornerPencilMarks: [], centrePencilMarks: [] }, { digit: null, cornerPencilMarks: [], centrePencilMarks: [] }, { digit: null, cornerPencilMarks: [], centrePencilMarks: [] }, { digit: null, cornerPencilMarks: [], centrePencilMarks: [] }, { digit: null, cornerPencilMarks: [], centrePencilMarks: [] }, { digit: null, cornerPencilMarks: [], centrePencilMarks: [] }, { digit: null, cornerPencilMarks: [], centrePencilMarks: [] }, { digit: null, cornerPencilMarks: [], centrePencilMarks: [] }],
-    [{ digit: null, cornerPencilMarks: [], centrePencilMarks: [] }, { digit: null, cornerPencilMarks: [], centrePencilMarks: [] }, { digit: null, cornerPencilMarks: [], centrePencilMarks: [] }, { digit: null, cornerPencilMarks: [], centrePencilMarks: [] }, { digit: null, cornerPencilMarks: [], centrePencilMarks: [] }, { digit: null, cornerPencilMarks: [], centrePencilMarks: [] }, { digit: null, cornerPencilMarks: [], centrePencilMarks: [] }, { digit: null, cornerPencilMarks: [], centrePencilMarks: [] }, { digit: null, cornerPencilMarks: [], centrePencilMarks: [] }],
-    [{ digit: null, cornerPencilMarks: [], centrePencilMarks: [] }, { digit: null, cornerPencilMarks: [], centrePencilMarks: [] }, { digit: null, cornerPencilMarks: [], centrePencilMarks: [] }, { digit: null, cornerPencilMarks: [], centrePencilMarks: [] }, { digit: null, cornerPencilMarks: [], centrePencilMarks: [] }, { digit: null, cornerPencilMarks: [], centrePencilMarks: [] }, { digit: null, cornerPencilMarks: [], centrePencilMarks: [] }, { digit: null, cornerPencilMarks: [], centrePencilMarks: [] }, { digit: null, cornerPencilMarks: [], centrePencilMarks: [] }],
-    [{ digit: null, cornerPencilMarks: [], centrePencilMarks: [] }, { digit: null, cornerPencilMarks: [], centrePencilMarks: [] }, { digit: null, cornerPencilMarks: [], centrePencilMarks: [] }, { digit: null, cornerPencilMarks: [], centrePencilMarks: [] }, { digit: null, cornerPencilMarks: [], centrePencilMarks: [] }, { digit: null, cornerPencilMarks: [], centrePencilMarks: [] }, { digit: null, cornerPencilMarks: [], centrePencilMarks: [] }, { digit: null, cornerPencilMarks: [], centrePencilMarks: [] }, { digit: null, cornerPencilMarks: [], centrePencilMarks: [] }],
-    [{ digit: null, cornerPencilMarks: [], centrePencilMarks: [] }, { digit: null, cornerPencilMarks: [], centrePencilMarks: [] }, { digit: null, cornerPencilMarks: [], centrePencilMarks: [] }, { digit: null, cornerPencilMarks: [], centrePencilMarks: [] }, { digit: null, cornerPencilMarks: [], centrePencilMarks: [] }, { digit: null, cornerPencilMarks: [], centrePencilMarks: [] }, { digit: null, cornerPencilMarks: [], centrePencilMarks: [] }, { digit: null, cornerPencilMarks: [], centrePencilMarks: [] }, { digit: null, cornerPencilMarks: [], centrePencilMarks: [] }]
-  ]
+    [{ digit: null }, { digit: null }, { digit: null }, { digit: null }, { digit: null }, { digit: null }, { digit: null }, { digit: null }, { digit: null }],
+    [{ digit: null }, { digit: null }, { digit: null }, { digit: null }, { digit: null }, { digit: null }, { digit: null }, { digit: null }, { digit: null }],
+    [{ digit: null }, { digit: null }, { digit: null }, { digit: null }, { digit: null }, { digit: null }, { digit: null }, { digit: null }, { digit: null }],
+    [{ digit: null }, { digit: null }, { digit: null }, { digit: null }, { digit: null }, { digit: null }, { digit: null }, { digit: null }, { digit: null }],
+    [{ digit: null }, { digit: null }, { digit: null }, { digit: null }, { digit: null }, { digit: null }, { digit: null }, { digit: null }, { digit: null }],
+    [{ digit: null }, { digit: null }, { digit: null }, { digit: null }, { digit: null }, { digit: null }, { digit: null }, { digit: null }, { digit: null }],
+    [{ digit: null }, { digit: null }, { digit: null }, { digit: null }, { digit: null }, { digit: null }, { digit: null }, { digit: null }, { digit: null }],
+    [{ digit: null }, { digit: null }, { digit: null }, { digit: null }, { digit: null }, { digit: null }, { digit: null }, { digit: null }, { digit: null }],
+    [{ digit: null }, { digit: null }, { digit: null }, { digit: null }, { digit: null }, { digit: null }, { digit: null }, { digit: null }, { digit: null }]
+  ],
+
+  // Expects { col: x, row: y } objects
+  highlights: []
 })
 
 export const mutations = {
-  placeDigit (state, x, y, number) {
-    const gridSlot = state.grid[x][y]
-    gridSlot.digit = number
+  // Cell selection highlights
+  toggleHighlight (state, payload) {
+    // Check if this row/col exists already
+    if (state.highlights.filter(data => data.row === payload.row && data.col === payload.col).length > 0) {
+      // It does exist, so remove it
+      state.highlights = state.highlights.filter(data => data.row !== payload.row || data.col !== payload.col)
+    } else {
+      // This is a new row/col so add it
+      state.highlights.push({ row: payload.row, col: payload.col })
+    }
   },
 
-  toggleCornerPencilMark (state, x, y, number) {
-    const gridSlot = state.grid[x][y]
-    const pencilMarks = gridSlot.cornerPencilMarks
-    if (pencilMarks.indexOf(number)) {
-      pencilMarks.splice(pencilMarks.indexOf(number), 2)
-    } else {
-      pencilMarks.push(number)
-    }
+  clearHighlights (state) {
+    state.highlights = []
   }
 }

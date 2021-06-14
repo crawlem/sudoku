@@ -1,109 +1,22 @@
 <template>
   <div class="grid">
+    <!-- Act as event handlers and draw the outline of each cell over the SVG -->
     <div class="cells">
-      <div class="row">
-        <div class="cell" data-row="0" data-col="0" @click="toggleHighlight" />
-        <div class="cell" data-row="0" data-col="1" />
-        <div class="cell" data-row="0" data-col="2" />
-        <div class="cell" data-row="0" data-col="3" />
-        <div class="cell" data-row="0" data-col="4" />
-        <div class="cell" data-row="0" data-col="5" />
-        <div class="cell" data-row="0" data-col="6" />
-        <div class="cell" data-row="0" data-col="7" />
-        <div class="cell" data-row="0" data-col="8" />
-      </div>
-      <div class="row">
-        <div class="cell" data-row="1" data-col="0" />
-        <div class="cell" data-row="1" data-col="1" />
-        <div class="cell" data-row="1" data-col="2" />
-        <div class="cell" data-row="1" data-col="3" />
-        <div class="cell" data-row="1" data-col="4" />
-        <div class="cell" data-row="1" data-col="5" />
-        <div class="cell" data-row="1" data-col="6" />
-        <div class="cell" data-row="1" data-col="7" />
-        <div class="cell" data-row="1" data-col="8" />
-      </div>
-      <div class="row">
-        <div class="cell" data-row="2" data-col="0" />
-        <div class="cell" data-row="2" data-col="1" />
-        <div class="cell" data-row="2" data-col="2" />
-        <div class="cell" data-row="2" data-col="3" />
-        <div class="cell" data-row="2" data-col="4" />
-        <div class="cell" data-row="2" data-col="5" />
-        <div class="cell" data-row="2" data-col="6" />
-        <div class="cell" data-row="2" data-col="7" />
-        <div class="cell" data-row="2" data-col="8" />
-      </div>
-      <div class="row">
-        <div class="cell" data-row="3" data-col="0" />
-        <div class="cell" data-row="3" data-col="1" />
-        <div class="cell" data-row="3" data-col="2" />
-        <div class="cell" data-row="3" data-col="3" />
-        <div class="cell" data-row="3" data-col="4" />
-        <div class="cell" data-row="3" data-col="5" />
-        <div class="cell" data-row="3" data-col="6" />
-        <div class="cell" data-row="3" data-col="7" />
-        <div class="cell" data-row="3" data-col="8" />
-      </div>
-      <div class="row">
-        <div class="cell" data-row="4" data-col="0" />
-        <div class="cell" data-row="4" data-col="1" />
-        <div class="cell" data-row="4" data-col="2" />
-        <div class="cell" data-row="4" data-col="3" />
-        <div class="cell" data-row="4" data-col="4" />
-        <div class="cell" data-row="4" data-col="5" />
-        <div class="cell" data-row="4" data-col="6" />
-        <div class="cell" data-row="4" data-col="7" />
-        <div class="cell" data-row="4" data-col="8" />
-      </div>
-      <div class="row">
-        <div class="cell" data-row="5" data-col="0" />
-        <div class="cell" data-row="5" data-col="1" />
-        <div class="cell" data-row="5" data-col="2" />
-        <div class="cell" data-row="5" data-col="3" />
-        <div class="cell" data-row="5" data-col="4" />
-        <div class="cell" data-row="5" data-col="5" />
-        <div class="cell" data-row="5" data-col="6" />
-        <div class="cell" data-row="5" data-col="7" />
-        <div class="cell" data-row="5" data-col="8" />
-      </div>
-      <div class="row">
-        <div class="cell" data-row="6" data-col="0" />
-        <div class="cell" data-row="6" data-col="1" />
-        <div class="cell" data-row="6" data-col="2" />
-        <div class="cell" data-row="6" data-col="3" />
-        <div class="cell" data-row="6" data-col="4" />
-        <div class="cell" data-row="6" data-col="5" />
-        <div class="cell" data-row="6" data-col="6" />
-        <div class="cell" data-row="6" data-col="7" />
-        <div class="cell" data-row="6" data-col="8" />
-      </div>
-      <div class="row">
-        <div class="cell" data-row="7" data-col="0" />
-        <div class="cell" data-row="7" data-col="1" />
-        <div class="cell" data-row="7" data-col="2" />
-        <div class="cell" data-row="7" data-col="3" />
-        <div class="cell" data-row="7" data-col="4" />
-        <div class="cell" data-row="7" data-col="5" />
-        <div class="cell" data-row="7" data-col="6" />
-        <div class="cell" data-row="7" data-col="7" />
-        <div class="cell" data-row="7" data-col="8" />
-      </div>
-      <div class="row">
-        <div class="cell" data-row="8" data-col="0" />
-        <div class="cell" data-row="8" data-col="1" />
-        <div class="cell" data-row="8" data-col="2" />
-        <div class="cell" data-row="8" data-col="3" />
-        <div class="cell" data-row="8" data-col="4" />
-        <div class="cell" data-row="8" data-col="5" />
-        <div class="cell" data-row="8" data-col="6" />
-        <div class="cell" data-row="8" data-col="7" />
-        <div class="cell" data-row="8" data-col="8" />
+      <div v-for="r in 9" :key="r" class="row">
+        <div
+          v-for="c in 9"
+          :key="c"
+          class="cell"
+          :data-row="r-1"
+          :data-col="c-1"
+          @click="highlight"
+        />
       </div>
     </div>
 
+    <!-- Our main board/grid image -->
     <svg
-      id="svgrenderer"
+      id="svg-renderer"
       class="board-svg"
       xmlns="http://www.w3.org/2000/svg"
       version="1.1"
@@ -115,101 +28,73 @@
       <g id="cell-colours" /> -->
       <g id="cell-highlights">
         <rect
+          v-for="h in highlights"
+          :key="h.id"
           className="cell-highlight"
-          vector-effect="non-scaling-size"
-          fill="none"
-          stroke="none"
-          stroke-width="0"
           class="cell-highlight"
-          x="448"
-          y="512"
-          width="64"
-          height="64"
+          vector-effect="non-scaling-size"
           opacity="1"
+          :x="gridMetaData.highlightCoords[h.col]"
+          :y="gridMetaData.highlightCoords[h.row]"
+          :width="gridMetaData.cellDimensions"
+          :height="gridMetaData.cellDimensions"
         />
       </g>
-      <g id="arrows" />
+      <!-- <g id="arrows" /> -->
       <g id="cell-grids">
         <path
           class="cell-grid"
           d="M0 0 L576 0 M0 64 L576 64 M0 128 L576 128 M0 192 L576 192 M0 256 L576 256 M0 320 L576 320 M0 384 L576 384 M0 448 L576 448 M0 512 L576 512 M0 576 L576 576 M0 0 L0 576 M64 0 L64 576 M128 0 L128 576 M192 0 L192 576 M256 0 L256 576 M320 0 L320 576 M384 0 L384 576 M448 0 L448 576 M512 0 L512 576 M576 0 L576 576"
         />
         <path
-          fill="none"
-          stroke="rgba(0, 0, 0, 1)"
-          stroke-width="3px"
           class="cage-box"
           shape-rendering="geometricprecision"
           vector-effect="non-scaling-stroke"
           d="M0 0 L96 0 L192 0 L192 96 L192 192 L96 192 L0 192 L0 96 Z"
         />
         <path
-          fill="none"
-          stroke="rgba(0, 0, 0, 1)"
-          stroke-width="3px"
           class="cage-box"
           shape-rendering="geometricprecision"
           vector-effect="non-scaling-stroke"
           d="M0 192 L96 192 L192 192 L192 288 L192 384 L96 384 L0 384 L0 288 Z"
         />
         <path
-          fill="none"
-          stroke="rgba(0, 0, 0, 1)"
-          stroke-width="3px"
           class="cage-box"
           shape-rendering="geometricprecision"
           vector-effect="non-scaling-stroke"
           d="M0 384 L96 384 L192 384 L192 480 L192 576 L96 576 L0 576 L0 480 Z"
         />
         <path
-          fill="none"
-          stroke="rgba(0, 0, 0, 1)"
-          stroke-width="3px"
           class="cage-box"
           shape-rendering="geometricprecision"
           vector-effect="non-scaling-stroke"
           d="M192 0 L288 0 L384 0 L384 96 L384 192 L288 192 L192 192 L192 96 Z"
         />
         <path
-          fill="none"
-          stroke="rgba(0, 0, 0, 1)"
-          stroke-width="3px"
           class="cage-box"
           shape-rendering="geometricprecision"
           vector-effect="non-scaling-stroke"
           d="M192 192 L288 192 L384 192 L384 288 L384 384 L288 384 L192 384 L192 288 Z"
         />
         <path
-          fill="none"
-          stroke="rgba(0, 0, 0, 1)"
-          stroke-width="3px"
           class="cage-box"
           shape-rendering="geometricprecision"
           vector-effect="non-scaling-stroke"
           d="M192 384 L288 384 L384 384 L384 480 L384 576 L288 576 L192 576 L192 480 Z"
         />
         <path
-          fill="none"
-          stroke="rgba(0, 0, 0, 1)"
-          stroke-width="3px"
           class="cage-box"
           shape-rendering="geometricprecision"
           vector-effect="non-scaling-stroke"
           d="M384 0 L480 0 L576 0 L576 96 L576 192 L480 192 L384 192 L384 96 Z"
         />
         <path
-          fill="none"
-          stroke="rgba(0, 0, 0, 1)"
-          stroke-width="3px"
           class="cage-box"
           shape-rendering="geometricprecision"
           vector-effect="non-scaling-stroke"
           d="M384 192 L480 192 L576 192 L576 288 L576 384 L480 384 L384 384 L384 288 Z"
         />
         <path
-          fill="none"
-          stroke="rgba(0, 0, 0, 1)"
-          stroke-width="3px"
           class="cage-box"
           shape-rendering="geometricprecision"
           vector-effect="non-scaling-stroke"
@@ -319,16 +204,29 @@
 </template>
 
 <script>
-// import Snap from 'snapsvg'
 export default {
+  data () {
+    // Layout constants
+    return {
+      gridMetaData: {
+        cellDimensions: 64,
+        highlightCoords: [0, 64, 128, 192, 256, 320, 384, 448, 512]
+      }
+    }
+  },
   computed: {
-    sudokuMatrix () {
-      return this.$store.state.grid
+    highlights () {
+      return this.$store.state.highlights
     }
   },
   methods: {
-    toggleHighlight (event) {
-      console.log(event.target)
+    highlight (event) {
+      const row = parseInt(event.target.attributes['data-row'].value)
+      const col = parseInt(event.target.attributes['data-col'].value)
+      this.$store.commit('toggleHighlight', {
+        row,
+        col
+      })
     }
   }
 }
@@ -375,9 +273,19 @@ export default {
     height: 576px;
     margin: 0;
 
-    #cell-givens text {
-      font-size: 3em;
-      fill: $digit-colour-given;
+    #cell-grids {
+      .cage-box {
+        stroke: $grid-colour;
+        stroke-width: 3px;
+        fill: none;
+      }
+    }
+
+    #cell-givens {
+      text {
+        font-size: 3em;
+        fill: $digit-colour-given;
+      }
     }
 
     #cell-pencilmarks {
@@ -411,14 +319,24 @@ export default {
       }
     }
 
-    #cell-candidates text {
-      font-size: 1.1rem;
-      fill: $pencilmark-colour;
+    #cell-candidates {
+      text {
+        font-size: 1.1rem;
+        fill: $pencilmark-colour;
+      }
     }
 
-    #cell-values text {
-      font-size: 3em;
-      fill: $digit-colour-user;
+    #cell-values {
+      text {
+        font-size: 3em;
+        fill: $digit-colour-user;
+      }
+    }
+
+    #cell-highlights {
+      .cell-highlight {
+        fill: $highlight-colour;
+      }
     }
   }
 }
