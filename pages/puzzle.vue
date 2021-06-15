@@ -9,7 +9,7 @@
 export default {
   methods: {
     clearHighlights (event) {
-      this.$store.commit('clearHighlights')
+      this.$store.commit('highlights/clear')
     }
   }
 }

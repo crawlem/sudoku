@@ -103,7 +103,7 @@
       </g>
       <!-- <g id="cell-errors" />
       <g id="overlay" /> -->
-      <g id="cell-givens">
+      <!-- <g id="cell-givens">
         <text
           x="288.96"
           y="547.2"
@@ -114,6 +114,8 @@
           stroke-linejoin="miter"
           paint-order="stroke fill"
           target="cell-givens"
+          class="cell-given"
+          className="cell-given"
           center="8.5,4.5"
           width="1"
           height="1"
@@ -130,13 +132,15 @@
           stroke-linejoin="miter"
           paint-order="stroke fill"
           target="cell-givens"
+          class="cell-given"
+          className="cell-given"
           center="8.5,8.5"
           width="1"
           height="1"
         >
           4
         </text>
-      </g>
+      </g> -->
       <!-- <g id="cell-pen" /> -->
       <g id="cell-pencilmarks">
         <text
@@ -181,8 +185,11 @@
       </g>
       <g id="cell-values">
         <text
-          x="544.96"
-          y="419.2"
+          v-for="(cell, index) in digits"
+          :key="index"
+          :x="gridMetaData.digitCoords.x[cell.col]"
+          :y="gridMetaData.digitCoords.y[cell.row]"
+          center="6.5,8.5"
           text-anchor="middle"
           dominant-baseline="middle"
           stroke-width="2px"
@@ -190,13 +197,12 @@
           stroke-linejoin="miter"
           paint-order="stroke fill"
           target="cell-values"
-          className="cell-value"
-          center="6.5,8.5"
+          :className="(cell.given) ? 'cell-given' : 'cell-value'"
+          :class="(cell.given) ? 'cell-given' : 'cell-value'"
           width="1"
           height="1"
-          class="cell-value"
         >
-          1
+          {{ cell.digit }}
         </text>
       </g>
     </svg>
@@ -210,19 +216,47 @@ export default {
     return {
       gridMetaData: {
         cellDimensions: 64,
-        highlightCoords: [0, 64, 128, 192, 256, 320, 384, 448, 512]
+        highlightCoords: [0, 64, 128, 192, 256, 320, 384, 448, 512],
+        digitCoords: {
+          x: [32.96, 96.96, 160.96, 224.96, 288.96, 352.96, 416.96, 480.96, 544.96],
+          y: [35.2, 99.2, 163.2, 227.2, 291.2, 355.2, 419.2, 483.2, 547.2]
+        }
       },
       dragging: false
     }
   },
+
   computed: {
     highlights () {
-      return this.$store.state.highlights
+      return this.$store.state.highlights.list
+    },
+
+    digits () {
+      const grid = []
+      for (let rowIndex = 0; rowIndex < this.$store.state.grid.length; rowIndex++) {
+        const row = this.$store.state.grid[rowIndex]
+
+        for (let colIndex = 0; colIndex < row.length; colIndex++) {
+          const col = row[colIndex]
+
+          if (col.digit) {
+            grid.push({
+              row: rowIndex,
+              col: colIndex,
+              digit: col.digit,
+              given: col.given
+            })
+          }
+        }
+      }
+
+      return grid
     }
   },
+
   methods: {
     clearHighlightsExcept (row, col) {
-      this.$store.commit('clearHighlightsExcept', {
+      this.$store.commit('highlights/clearAllExcept', {
         row,
         col
       })
@@ -245,7 +279,7 @@ export default {
       this.clearHighlightsExcept(row, col)
 
       // Add a highlight for the specific row/col cell clicked on
-      this.$store.commit('addHighlight', {
+      this.$store.commit('highlights/add', {
         row,
         col
       })
@@ -259,7 +293,7 @@ export default {
         const row = this.getEventRow(event)
         const col = this.getEventCol(event)
 
-        this.$store.commit('addHighlight', {
+        this.$store.commit('highlights/add', {
           row,
           col
         })
@@ -318,13 +352,6 @@ export default {
       }
     }
 
-    #cell-givens {
-      text {
-        font-size: 3em;
-        fill: $digit-colour-given;
-      }
-    }
-
     #cell-pencilmarks {
       text {
         font-size: 1.1rem;
@@ -363,17 +390,20 @@ export default {
       }
     }
 
-    #cell-values {
-      text {
-        font-size: 3em;
-        fill: $digit-colour-user;
-      }
-    }
-
     #cell-highlights {
       .cell-highlight {
         fill: $highlight-colour;
       }
+    }
+
+    .cell-value {
+      font-size: 3em;
+      fill: $digit-colour-user;
+    }
+
+    .cell-given {
+      font-size: 3em;
+      fill: $digit-colour-given;
     }
   }
 }
