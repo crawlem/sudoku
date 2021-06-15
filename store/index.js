@@ -15,6 +15,7 @@ export const state = () => ({
 export const mutations = {
   // Expects { col: x, row: y, digit: num } payload
   placeDigit (state, payload) {
+    // TODO Don't allow given values to be overwritten
     state.grid[payload.row][payload.col].digit = payload.digit
   }
 }

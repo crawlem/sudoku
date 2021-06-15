@@ -1,15 +1,15 @@
 <template>
   <div class="grid">
     <!-- Overlay for event handling and outline box for each cell -->
-    <div class="cells" @mousedown="startDragging" @mouseup="stopDragging">
+    <div class="cells">
       <div v-for="row in 9" :key="row" class="row">
         <div
           v-for="col in 9"
           :key="col"
           class="cell"
-          :data-row="row-1"
-          :data-col="col-1"
-          @mouseenter="highlightCell"
+          @mouseenter="highlightCell(row-1, col-1)"
+          @mousedown="startDragging(row-1, col-1)"
+          @mouseup="stopDragging"
         />
       </div>
     </div>
@@ -206,13 +206,23 @@
         </text>
       </g>
     </svg>
+
+    <div class="hidden">
+      <input
+        id="newDigit"
+        ref="newDigit"
+        type="text"
+        @keyup="keyPress"
+      >
+    </div>
   </div>
 </template>
 
 <script>
 export default {
   data () {
-    // Layout constants
+    // TODO Move the layout info out of the public API into the digits() computed property
+    // TODO Add centre attribute lookup
     return {
       gridMetaData: {
         cellDimensions: 64,
@@ -233,6 +243,7 @@ export default {
 
     digits () {
       const grid = []
+
       for (let rowIndex = 0; rowIndex < this.$store.state.grid.length; rowIndex++) {
         const row = this.$store.state.grid[rowIndex]
 
@@ -254,50 +265,86 @@ export default {
     }
   },
 
+  mounted () {
+    // Focus on our hidden input
+    this.$refs.newDigit.focus()
+  },
+
   methods: {
     clearHighlightsExcept (row, col) {
       this.$store.commit('highlights/clearAllExcept', {
         row,
         col
       })
+
+      // Keep focus on our hidden input
+      this.$refs.newDigit.focus()
     },
-    // Extract the cell's row index from the event target
-    getEventRow (event) {
-      return parseInt(event.target.attributes['data-row'].value)
-    },
-    // Extract the cell's column index from the event target
-    getEventCol (event) {
-      return parseInt(event.target.attributes['data-col'].value)
-    },
-    startDragging (event) {
+
+    startDragging (row, col) {
       this.dragging = true
 
-      const row = this.getEventRow(event)
-      const col = this.getEventCol(event)
+      // Keep focus on our hidden input
+      this.$refs.newDigit.focus()
 
-      // Clear all highlights first
+      // Clear all other highlights first
       this.clearHighlightsExcept(row, col)
 
-      // Add a highlight for the specific row/col cell clicked on
+      // Add a highlight for the row/col cell clicked on
       this.$store.commit('highlights/add', {
         row,
         col
       })
     },
+
     stopDragging (event) {
       this.dragging = false
-    },
-    highlightCell (event) {
-      if (this.dragging) {
-        // Add a highlight for the specific row/col cell hovered over
-        const row = this.getEventRow(event)
-        const col = this.getEventCol(event)
 
+      // Keep focus on our hidden input
+      this.$refs.newDigit.focus()
+    },
+
+    highlightCell (row, col) {
+      if (this.dragging) {
         this.$store.commit('highlights/add', {
           row,
           col
         })
       }
+
+      // Keep focus on our hidden input
+      this.$refs.newDigit.focus()
+    },
+
+    keyPress (event) {
+      // Work out what digit was pressed
+      const key = event.key
+
+      // Place digits
+      if (['1', '2', '3', '4', '5', '6', '7', '8', '9'].includes(key)) {
+        this.placeDigit(key)
+      }
+
+      // Handle delete key(s)
+      if (['Backspace', 'Delete'].includes(key)) {
+        this.placeDigit(null)
+      }
+
+      // Reset our input
+      const newDigitInput = this.$refs.newDigit
+      newDigitInput.focus()
+      newDigitInput.value = ''
+    },
+
+    placeDigit (digit) {
+      // Put the digit in all currently highlighted cells
+      this.highlights.forEach((cell) => {
+        this.$store.commit('placeDigit', {
+          col: cell.col,
+          row: cell.row,
+          digit
+        })
+      })
     }
   }
 }
@@ -305,7 +352,6 @@ export default {
 
 <style lang="scss">
 .grid {
-  position: absolute;
   display: flex;
   flex-direction: column;
   align-items: stretch;
@@ -406,5 +452,19 @@ export default {
       fill: $digit-colour-given;
     }
   }
+}
+
+.hidden {
+  position: fixed;
+  top: 0;
+  right: -250px;
+  bottom: 0;
+
+  -webkit-transition: width 0.2s ease-out;
+  -moz-transition: width 0.2s ease-out;
+  transition: width 0.2s ease-out;
+
+  overflow: hidden;
+  z-index: 999;
 }
 </style>
