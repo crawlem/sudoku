@@ -1,7 +1,7 @@
 <template>
   <div class="puzzle">
     <Grid />
-    <div class="white-space" @click="clearHighlights" />
+    <div class="white-space" @click.self="clearHighlights" />
   </div>
 </template>
 

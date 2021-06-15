@@ -1,15 +1,15 @@
 <template>
   <div class="grid">
-    <!-- Act as event handlers and draw the outline of each cell over the SVG -->
-    <div class="cells">
-      <div v-for="r in 9" :key="r" class="row">
+    <!-- Overlay for event handling and outline box for each cell -->
+    <div class="cells" @mousedown="startDragging" @mouseup="stopDragging">
+      <div v-for="row in 9" :key="row" class="row">
         <div
-          v-for="c in 9"
-          :key="c"
+          v-for="col in 9"
+          :key="col"
           class="cell"
-          :data-row="r-1"
-          :data-col="c-1"
-          @click="highlight"
+          :data-row="row-1"
+          :data-col="col-1"
+          @mouseenter="highlightCell"
         />
       </div>
     </div>
@@ -211,7 +211,8 @@ export default {
       gridMetaData: {
         cellDimensions: 64,
         highlightCoords: [0, 64, 128, 192, 256, 320, 384, 448, 512]
-      }
+      },
+      dragging: false
     }
   },
   computed: {
@@ -220,13 +221,49 @@ export default {
     }
   },
   methods: {
-    highlight (event) {
-      const row = parseInt(event.target.attributes['data-row'].value)
-      const col = parseInt(event.target.attributes['data-col'].value)
-      this.$store.commit('toggleHighlight', {
+    clearHighlightsExcept (row, col) {
+      this.$store.commit('clearHighlightsExcept', {
         row,
         col
       })
+    },
+    // Extract the cell's row index from the event target
+    getEventRow (event) {
+      return parseInt(event.target.attributes['data-row'].value)
+    },
+    // Extract the cell's column index from the event target
+    getEventCol (event) {
+      return parseInt(event.target.attributes['data-col'].value)
+    },
+    startDragging (event) {
+      this.dragging = true
+
+      const row = this.getEventRow(event)
+      const col = this.getEventCol(event)
+
+      // Clear all highlights first
+      this.clearHighlightsExcept(row, col)
+
+      // Add a highlight for the specific row/col cell clicked on
+      this.$store.commit('addHighlight', {
+        row,
+        col
+      })
+    },
+    stopDragging (event) {
+      this.dragging = false
+    },
+    highlightCell (event) {
+      if (this.dragging) {
+        // Add a highlight for the specific row/col cell hovered over
+        const row = this.getEventRow(event)
+        const col = this.getEventCol(event)
+
+        this.$store.commit('addHighlight', {
+          row,
+          col
+        })
+      }
     }
   }
 }
