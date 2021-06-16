@@ -8,10 +8,22 @@
 
 <script>
 export default {
-  async asyncData ({ $content, params }) {
+  async asyncData ({ $content }) {
     const doc = await $content('puzzle').fetch()
     return {
       doc
+    }
+  },
+
+  computed: {
+    givens () {
+      return this.$route.query.givens
+    }
+  },
+
+  mounted () {
+    if (this.$route.query.givens) {
+      this.$store.commit('initFromString', this.$route.query.givens)
     }
   },
 

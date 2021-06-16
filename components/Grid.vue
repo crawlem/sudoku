@@ -211,7 +211,8 @@
         id="newDigit"
         ref="newDigit"
         type="text"
-        @keyup="keyPress"
+        @keydown.ctrl="keyDown"
+        @keyup="keyUp"
       >
     </div>
   </div>
@@ -224,7 +225,8 @@ export default {
       gridMetaData: {
         cellDimensions: 64
       },
-      dragging: false
+      dragging: false,
+      ctrl: false
     }
   },
 
@@ -314,7 +316,11 @@ export default {
       this.$refs.newDigit.focus()
     },
 
-    keyPress (event) {
+    keyDown (event) {
+      this.ctrl = true
+    },
+
+    keyUp (event) {
       // Work out what digit was pressed
       const key = event.key
 
@@ -329,6 +335,7 @@ export default {
       }
 
       // Reset our input
+      this.ctrl = false
       const newDigitInput = this.$refs.newDigit
       newDigitInput.focus()
       newDigitInput.value = ''
