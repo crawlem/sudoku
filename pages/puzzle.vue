@@ -1,5 +1,6 @@
 <template>
   <div class="puzzle">
+    <nuxt-content :document="doc" />
     <Grid />
     <div class="white-space" @click.self="clearHighlights" />
   </div>
@@ -7,6 +8,13 @@
 
 <script>
 export default {
+  async asyncData ({ $content, params }) {
+    const doc = await $content('puzzle').fetch()
+    return {
+      doc
+    }
+  },
+
   methods: {
     clearHighlights (event) {
       this.$store.commit('highlights/clear')
