@@ -16,7 +16,6 @@
 
     <!-- Our main board/grid image -->
     <svg
-      id="svg-renderer"
       class="board-svg"
       xmlns="http://www.w3.org/2000/svg"
       version="1.1"
@@ -34,8 +33,8 @@
           class="cell-highlight"
           vector-effect="non-scaling-size"
           opacity="1"
-          :x="gridMetaData.highlightCoords[h.col]"
-          :y="gridMetaData.highlightCoords[h.row]"
+          :x="gridMetaData.cellDimensions * h.col"
+          :y="gridMetaData.cellDimensions * h.row"
           :width="gridMetaData.cellDimensions"
           :height="gridMetaData.cellDimensions"
         />
@@ -187,9 +186,9 @@
         <text
           v-for="(cell, index) in digits"
           :key="index"
-          :x="gridMetaData.digitCoords.x[cell.col]"
-          :y="gridMetaData.digitCoords.y[cell.row]"
-          center="6.5,8.5"
+          :x="cell.x"
+          :y="cell.y"
+          :center="(cell.col + 0.5) + ',' + (cell.row + 0.5)"
           text-anchor="middle"
           dominant-baseline="middle"
           stroke-width="2px"
@@ -221,16 +220,9 @@
 <script>
 export default {
   data () {
-    // TODO Move the layout info out of the public API into the digits() computed property
-    // TODO Add centre attribute lookup
     return {
       gridMetaData: {
-        cellDimensions: 64,
-        highlightCoords: [0, 64, 128, 192, 256, 320, 384, 448, 512],
-        digitCoords: {
-          x: [32.96, 96.96, 160.96, 224.96, 288.96, 352.96, 416.96, 480.96, 544.96],
-          y: [35.2, 99.2, 163.2, 227.2, 291.2, 355.2, 419.2, 483.2, 547.2]
-        }
+        cellDimensions: 64
       },
       dragging: false
     }
@@ -242,6 +234,10 @@ export default {
     },
 
     digits () {
+      const digitCoords = {
+        x: [32.96, 96.96, 160.96, 224.96, 288.96, 352.96, 416.96, 480.96, 544.96],
+        y: [35.2, 99.2, 163.2, 227.2, 291.2, 355.2, 419.2, 483.2, 547.2]
+      }
       const grid = []
 
       for (let rowIndex = 0; rowIndex < this.$store.state.grid.length; rowIndex++) {
@@ -254,6 +250,8 @@ export default {
             grid.push({
               row: rowIndex,
               col: colIndex,
+              y: digitCoords.y[rowIndex],
+              x: digitCoords.x[colIndex],
               digit: col.digit,
               given: col.given
             })
