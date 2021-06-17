@@ -14,11 +14,20 @@ export const state = () => ({
 
 export const mutations = {
   // Expects { col: x, row: y, digit: num } payload
-  placeDigit (state, payload) {
+  add (state, payload) {
     const cell = state.grid[payload.row][payload.col]
     // Don't allow given values to be overwritten
     if (!cell.given) {
       cell.digit = payload.digit
+    }
+  },
+
+  // Expects { col: x, row: y } payload
+  delete (state, payload) {
+    const cell = state.grid[payload.row][payload.col]
+    // Don't allow given values to be overwritten
+    if (!cell.given) {
+      cell.digit = null
     }
   },
 

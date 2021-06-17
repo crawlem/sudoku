@@ -169,7 +169,7 @@
         id="newDigit"
         ref="newDigit"
         type="text"
-        @keypress="handleInput"
+        @keyup="handleInput"
       >
     </div>
   </div>
@@ -289,28 +289,24 @@ export default {
     },
 
     handleInput (event) {
+      // Work out what key was pressed
+      const key = event.key
+      const digitCode = event.code
+
       // Digit, pencilmark or candidate?
       if (event.shiftKey) {
         // Place a pencilmark
-        const digitCode = event.code
         if (['Digit1', 'Digit2', 'Digit3', 'Digit4', 'Digit5', 'Digit6', 'Digit7', 'Digit8', 'Digit9'].includes(digitCode)) {
           // Pull out the integer from the key code
           const digit = digitCode.match(/\d/)[0]
           this.placePencilmark(digit)
         }
-      } else {
-        // Work out what key was pressed
-        const key = event.key
-
+      } else if (['1', '2', '3', '4', '5', '6', '7', '8', '9'].includes(key)) {
         // Place a digit
-        if (['1', '2', '3', '4', '5', '6', '7', '8', '9'].includes(key)) {
-          this.placeDigit(key)
-        }
-
-        // Handle delete key(s)
-        if (['Backspace', 'Delete'].includes(key)) {
-          this.placeDigit(null)
-        }
+        this.placeDigit(key)
+      } else if (['Backspace', 'Delete'].includes(key)) {
+        // Delete digits and pencil marks
+        this.deleteHighlightedCells()
       }
 
       // Reset our input ready to receive the next keystroke
@@ -320,9 +316,17 @@ export default {
     },
 
     placeDigit (digit) {
+      // Remove pencil marks from all currently highlighted cells
+      this.highlights.forEach((cell) => {
+        this.$store.commit('pencilMarks/delete', {
+          col: cell.col,
+          row: cell.row
+        })
+      })
+
       // Put the digit in all currently highlighted cells
       this.highlights.forEach((cell) => {
-        this.$store.commit('placeDigit', {
+        this.$store.commit('add', {
           col: cell.col,
           row: cell.row,
           digit
@@ -330,9 +334,31 @@ export default {
       })
     },
 
-    placePencilmark (digit) {
-      // Put the digit in all currently highlighted cells
+    deleteHighlightedCells () {
+      // Delete from highlighted cells
       this.highlights.forEach((cell) => {
+        this.$store.commit('delete', {
+          col: cell.col,
+          row: cell.row
+        })
+
+        this.$store.commit('pencilMarks/delete', {
+          col: cell.col,
+          row: cell.row
+        })
+      })
+    },
+
+    placePencilmark (digit) {
+      // Apply to all highlighted cells
+      this.highlights.forEach((cell) => {
+        // Delete any digit present
+        this.$store.commit('delete', {
+          col: cell.col,
+          row: cell.row
+        })
+
+        // Add a pencilmark
         this.$store.commit('pencilMarks/add', {
           col: cell.col,
           row: cell.row,
