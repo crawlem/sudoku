@@ -22,9 +22,6 @@
       draggable="false"
       viewBox="0 0 576 576"
     >
-      <!-- <g id="background" />
-      <g id="underlay" />
-      <g id="cell-colours" /> -->
       <g id="cell-highlights">
         <rect
           v-for="h in highlights"
@@ -39,7 +36,6 @@
           :height="gridMetaData.cellDimensions"
         />
       </g>
-      <!-- <g id="arrows" /> -->
       <g id="cell-grids">
         <path
           class="cell-grid"
@@ -100,51 +96,15 @@
           d="M384 384 L480 384 L576 384 L576 480 L576 576 L480 576 L384 576 L384 480 Z"
         />
       </g>
-      <!-- <g id="cell-errors" />
-      <g id="overlay" /> -->
-      <!-- <g id="cell-givens">
-        <text
-          x="288.96"
-          y="547.2"
-          text-anchor="middle"
-          dominant-baseline="middle"
-          stroke-width="2px"
-          stroke-linecap="butt"
-          stroke-linejoin="miter"
-          paint-order="stroke fill"
-          target="cell-givens"
-          class="cell-given"
-          className="cell-given"
-          center="8.5,4.5"
-          width="1"
-          height="1"
-        >
-          6
-        </text>
-        <text
-          x="544.96"
-          y="547.2"
-          text-anchor="middle"
-          dominant-baseline="middle"
-          stroke-width="2px"
-          stroke-linecap="butt"
-          stroke-linejoin="miter"
-          paint-order="stroke fill"
-          target="cell-givens"
-          class="cell-given"
-          className="cell-given"
-          center="8.5,8.5"
-          width="1"
-          height="1"
-        >
-          4
-        </text>
-      </g> -->
-      <!-- <g id="cell-pen" /> -->
       <g id="cell-pencilmarks">
         <text
-          x="480.96"
-          y="35.2"
+          v-for="(pencilMark, index) in pencilMarks"
+          :key="index"
+          :x="pencilMark.x"
+          :y="pencilMark.y"
+          :center="(pencilMark.col + 0.5) + ',' + (pencilMark.row + 0.5)"
+          :class="'cell-pencilmark pm-' + pencilMark.index"
+          :className="'cell-pencilmark pm-' + pencilMark.index"
           text-anchor="middle"
           dominant-baseline="middle"
           stroke-width="2px"
@@ -152,13 +112,10 @@
           stroke-linejoin="miter"
           paint-order="stroke fill"
           target="cell-pencilmarks"
-          className="cell-pencilmark pm-0"
-          center="0.5,7.5"
           width="1"
           height="1"
-          class="cell-pencilmark pm-0"
         >
-          1
+          {{ pencilMark.digit }}
         </text>
       </g>
       <g id="cell-candidates">
@@ -206,13 +163,13 @@
       </g>
     </svg>
 
+    <!-- Hidden input to capture key presses -->
     <div class="hidden">
       <input
         id="newDigit"
         ref="newDigit"
         type="text"
-        @keydown.ctrl="keyDown"
-        @keyup="keyUp"
+        @keypress="handleInput"
       >
     </div>
   </div>
@@ -223,10 +180,13 @@ export default {
   data () {
     return {
       gridMetaData: {
-        cellDimensions: 64
+        cellDimensions: 64,
+        digitCoords: {
+          x: [32.96, 96.96, 160.96, 224.96, 288.96, 352.96, 416.96, 480.96, 544.96],
+          y: [35.2, 99.2, 163.2, 227.2, 291.2, 355.2, 419.2, 483.2, 547.2]
+        }
       },
-      dragging: false,
-      ctrl: false
+      dragging: false
     }
   },
 
@@ -236,10 +196,6 @@ export default {
     },
 
     digits () {
-      const digitCoords = {
-        x: [32.96, 96.96, 160.96, 224.96, 288.96, 352.96, 416.96, 480.96, 544.96],
-        y: [35.2, 99.2, 163.2, 227.2, 291.2, 355.2, 419.2, 483.2, 547.2]
-      }
       const grid = []
 
       for (let rowIndex = 0; rowIndex < this.$store.state.grid.length; rowIndex++) {
@@ -252,8 +208,8 @@ export default {
             grid.push({
               row: rowIndex,
               col: colIndex,
-              y: digitCoords.y[rowIndex],
-              x: digitCoords.x[colIndex],
+              y: this.gridMetaData.digitCoords.y[rowIndex],
+              x: this.gridMetaData.digitCoords.x[colIndex],
               digit: col.digit,
               given: col.given
             })
@@ -262,6 +218,22 @@ export default {
       }
 
       return grid
+    },
+
+    pencilMarks () {
+      const marks = []
+      const list = this.$store.state.pencilMarks.list
+      for (let i = 0; i < list.length; i++) {
+        marks.push({
+          row: list[i].row,
+          col: list[i].col,
+          digit: list[i].digit,
+          index: list[i].index,
+          x: this.gridMetaData.digitCoords.x[list[i].col],
+          y: this.gridMetaData.digitCoords.y[list[i].row]
+        })
+      }
+      return marks
     }
   },
 
@@ -316,26 +288,32 @@ export default {
       this.$refs.newDigit.focus()
     },
 
-    keyDown (event) {
-      this.ctrl = true
-    },
+    handleInput (event) {
+      // Digit, pencilmark or candidate?
+      if (event.shiftKey) {
+        // Place a pencilmark
+        const digitCode = event.code
+        if (['Digit1', 'Digit2', 'Digit3', 'Digit4', 'Digit5', 'Digit6', 'Digit7', 'Digit8', 'Digit9'].includes(digitCode)) {
+          // Pull out the integer from the key code
+          const digit = digitCode.match(/\d/)[0]
+          this.placePencilmark(digit)
+        }
+      } else {
+        // Work out what key was pressed
+        const key = event.key
 
-    keyUp (event) {
-      // Work out what digit was pressed
-      const key = event.key
+        // Place a digit
+        if (['1', '2', '3', '4', '5', '6', '7', '8', '9'].includes(key)) {
+          this.placeDigit(key)
+        }
 
-      // Place digits
-      if (['1', '2', '3', '4', '5', '6', '7', '8', '9'].includes(key)) {
-        this.placeDigit(key)
+        // Handle delete key(s)
+        if (['Backspace', 'Delete'].includes(key)) {
+          this.placeDigit(null)
+        }
       }
 
-      // Handle delete key(s)
-      if (['Backspace', 'Delete'].includes(key)) {
-        this.placeDigit(null)
-      }
-
-      // Reset our input
-      this.ctrl = false
+      // Reset our input ready to receive the next keystroke
       const newDigitInput = this.$refs.newDigit
       newDigitInput.focus()
       newDigitInput.value = ''
@@ -345,6 +323,17 @@ export default {
       // Put the digit in all currently highlighted cells
       this.highlights.forEach((cell) => {
         this.$store.commit('placeDigit', {
+          col: cell.col,
+          row: cell.row,
+          digit
+        })
+      })
+    },
+
+    placePencilmark (digit) {
+      // Put the digit in all currently highlighted cells
+      this.highlights.forEach((cell) => {
+        this.$store.commit('pencilMarks/add', {
           col: cell.col,
           row: cell.row,
           digit

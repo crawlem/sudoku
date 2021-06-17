@@ -1,5 +1,5 @@
 <template>
-  <div class="puzzle">
+  <div class="puzzle" @click.self="clearHighlights">
     <nuxt-content :document="doc" />
     <Grid />
     <div class="white-space" @click.self="clearHighlights" />
@@ -45,6 +45,10 @@ body {
   height: 100%;
 }
 
+.puzzle {
+  width: 576px;
+}
+
 .white-space {
   position: absolute;
   top: 0;
@@ -52,6 +56,6 @@ body {
   left: 0;
   right: 0;
   overflow: hidden;
-  z-index: -1;
+  z-index: 1;
 }
 </style>
