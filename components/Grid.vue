@@ -163,7 +163,7 @@
       </g>
     </svg>
 
-    <!-- Hidden input to capture key presses -->
+    <!-- Hidden input to capture keyboard input -->
     <div class="hidden">
       <input
         id="newDigit"
@@ -403,7 +403,7 @@ export default {
         height: 100%;
         content: "";
         outline: 1px solid $grid-colour;
-        outline-offset: -0.5px;
+        outline-offset: -1px;
       }
     }
   }
