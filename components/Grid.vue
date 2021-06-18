@@ -118,7 +118,7 @@
           {{ pencilMark.digit }}
         </text>
       </g>
-      <g id="cell-candidates">
+      <!-- <g id="cell-candidates">
         <text
           x="480.96"
           y="35.2"
@@ -138,7 +138,7 @@
         >
           8
         </text>
-      </g>
+      </g> -->
       <g id="cell-values">
         <text
           v-for="(cell, index) in digits"
@@ -223,16 +223,21 @@ export default {
     pencilMarks () {
       const marks = []
       const list = this.$store.state.pencilMarks.list
+
       for (let i = 0; i < list.length; i++) {
+        const pencilMark = list[i]
+
+        // Add display meta data to each pencil mark
         marks.push({
-          row: list[i].row,
-          col: list[i].col,
-          digit: list[i].digit,
-          index: list[i].index,
-          x: this.gridMetaData.digitCoords.x[list[i].col],
-          y: this.gridMetaData.digitCoords.y[list[i].row]
+          row: pencilMark.row,
+          col: pencilMark.col,
+          digit: pencilMark.digit,
+          index: pencilMark.index,
+          x: this.gridMetaData.digitCoords.x[pencilMark.col],
+          y: this.gridMetaData.digitCoords.y[pencilMark.row]
         })
       }
+
       return marks
     }
   },
@@ -335,13 +340,15 @@ export default {
     },
 
     deleteHighlightedCells () {
-      // Delete from highlighted cells
+      // Apply to all highlighted cells
       this.highlights.forEach((cell) => {
+        // Delete digits
         this.$store.commit('delete', {
           col: cell.col,
           row: cell.row
         })
 
+        // Delete pencil marks
         this.$store.commit('pencilMarks/delete', {
           col: cell.col,
           row: cell.row

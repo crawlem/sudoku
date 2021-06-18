@@ -18,7 +18,7 @@ export const mutations = {
     const cell = state.grid[payload.row][payload.col]
     // Don't allow given values to be overwritten
     if (!cell.given) {
-      cell.digit = payload.digit
+      cell.digit = parseInt(payload.digit)
     }
   },
 
