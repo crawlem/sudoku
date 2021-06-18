@@ -4,6 +4,7 @@ export const state = () => ({
 
 export const mutations = {
   // Expects { col: x, row: y, digit: z } payload
+  // TODO Refactor as we are actually sometimes deleting from state in this method!
   add (state, payload) {
     // Check if this row/col exists already
     const otherPencilMarks = state.list.filter(data => data.row === payload.row && data.col === payload.col)

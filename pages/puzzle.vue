@@ -2,6 +2,9 @@
   <div class="puzzle" @click.self="clearHighlights">
     <nuxt-content :document="doc" />
     <Grid />
+    <button @click="validate">
+      Solve
+    </button>
     <div class="white-space" @click.self="clearHighlights" />
   </div>
 </template>
@@ -28,14 +31,18 @@ export default {
   },
 
   methods: {
-    clearHighlights (event) {
+    clearHighlights () {
       this.$store.commit('highlights/clear')
+    },
+
+    validate () {
+      this.$store.dispatch('validate')
     }
   }
 }
 </script>
 
-<style>
+<style lang="scss">
 html {
   min-height: 100%;
   position: relative;
@@ -47,6 +54,11 @@ body {
 
 .puzzle {
   width: 576px;
+
+  button {
+    position: relative;
+    z-index: 10;
+  }
 }
 
 .white-space {
@@ -56,6 +68,6 @@ body {
   left: 0;
   right: 0;
   overflow: hidden;
-  z-index: 1;
+  z-index: 2;
 }
 </style>

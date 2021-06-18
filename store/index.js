@@ -9,8 +9,17 @@ export const state = () => ({
     [{ digit: null }, { digit: null }, { digit: null }, { digit: null }, { digit: null }, { digit: null }, { digit: null }, { digit: null }, { digit: null }],
     [{ digit: null }, { digit: null }, { digit: null }, { digit: null }, { digit: null }, { digit: null }, { digit: null }, { digit: null }, { digit: null }],
     [{ digit: null }, { digit: null }, { digit: null }, { digit: null }, { digit: null }, { digit: null }, { digit: null }, { digit: null }, { digit: null }]
-  ]
+  ],
+
+  valid: false
 })
+
+export const actions = {
+  validate () {
+    // Test
+    console.log(this.$solver)
+  }
+}
 
 export const mutations = {
   // Expects { col: x, row: y, digit: num } payload
