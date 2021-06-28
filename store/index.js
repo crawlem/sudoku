@@ -1,4 +1,5 @@
 export const state = () => ({
+  // A 2D array representing rows and columns, containing objects like { digit: 1, given: true }
   grid: [
     [{ digit: null }, { digit: null }, { digit: null }, { digit: null }, { digit: null }, { digit: null }, { digit: null }, { digit: null }, { digit: null }],
     [{ digit: null }, { digit: null }, { digit: null }, { digit: null }, { digit: null }, { digit: null }, { digit: null }, { digit: null }, { digit: null }],
@@ -42,6 +43,7 @@ export const mutations = {
 
   // Initialise from a string of given numbers starting top left and going across
   // E.g. 000079065000003002005060093340050106000000000608020059950010600700600000820390000
+  // E.g. 000000000000000000000000000000000000000000000309040106090405030807060504000000000
   initFromString (state, givens) {
     for (let i = 0; i < givens.length; i++) {
       const rowIndex = Math.floor(i / 9)
